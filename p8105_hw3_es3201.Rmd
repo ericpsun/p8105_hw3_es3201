@@ -9,7 +9,6 @@ Initial setup
 ```{r}
 library(tidyverse)
 library(p8105.datasets)
-library(janitor)
 library(viridis)
 
 knitr::opts_chunk$set(
@@ -149,7 +148,23 @@ Based on the graph, the patient is least active at night and starts to increase 
 
 # Problem 3
 
+Load dataset
 ```{r}
 data("ny_noaa")
+```
+
+Describe dataset
+```{r}
+ny_noaa %>%
+  select(prcp:tmin) %>%
+  summarise_all(funs(sum(is.na(.))))
+```
+
+
+The ny_noaa database contains `r nrow(ny_noaa)` rows and `r ncol(ny_noaa)` columns. For each date and weather station, the dataset contains the amount of precipitation (prcp), snowfall (snow), snow depth (snwd), maximum temperature (tmax) and minimum temperature (tmin). There are a significant amount of missing values with `r 145838/nrow(ny_noaa)` of prcp, `r 381221/nrow(ny_noaa)` of snow, `r 591786/nrow(ny_noaa)` of snwd, `r 1134358/nrow(ny_noaa)` of tmax and `r 1134420/nrow(ny_noaa)` of tmin missing.
+
+Clean data, separate date, change units, and find most common observed value
+```{r}
+ny_noaa
 ```
 
