@@ -83,3 +83,18 @@ instacart %>%
 ```
 
 #Problem 2
+
+Load, tidy, wrangle data; include a weekday vs weekend variable; and encode data with reasonable variable classes
+```{r}
+accel_df = read_csv("./data/accel_data.csv") %>%
+  pivot_longer(activity.1:activity.1440, names_to = "minute", names_prefix="activity.", values_to = "count") %>%
+  mutate(day=factor(day,c("Monday", "Tuesday", "Wednesday", "Thursday","Friday","Saturday","Sunday"))) %>%
+  mutate(weekend=case_when(
+    day %in% c("Saturday","Sunday") ~ "TRUE",
+    day %in% c("Monday", "Tuesday", "Wednesday", "Thursday","Friday") ~ "FALSE")) %>%
+  mutate(weekend=as.logical(weekend))
+accel_df
+```
+
+The accel_df database contains `r nrow(accel_df)` rows and `r ncol(accel_df)` columns. The variables describe the timing of the observations and the amount of activity for each observation.
+
