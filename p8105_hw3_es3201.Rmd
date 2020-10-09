@@ -9,6 +9,20 @@ Initial setup
 ```{r}
 library(tidyverse)
 library(p8105.datasets)
+library(janitor)
+
+			 Knitr::opts_chunk$set(
+				 Fig.width=6,
+				 Fig.asp=.6,
+				 Out.width="90%"
+				 )
+			 Theme_set(theme_minimal() + theme(legend.position="bottom"))
+				 
+			 Options(
+				 Ggplot2.continuous.colour="viridis",
+				 Ggplot2.continuous.fill="viridis")
+			 Scale_colour_discrete=scale_color_viridis_d
+			 Scale_fill_discrete=scale_fill_viridis_d
 
 ```
 
@@ -68,3 +82,4 @@ instacart %>%
 	)
 ```
 
+#Problem 2
