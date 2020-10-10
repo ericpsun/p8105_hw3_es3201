@@ -163,8 +163,21 @@ ny_noaa %>%
 
 The ny_noaa database contains `r nrow(ny_noaa)` rows and `r ncol(ny_noaa)` columns. For each date and weather station, the dataset contains the amount of precipitation (prcp), snowfall (snow), snow depth (snwd), maximum temperature (tmax) and minimum temperature (tmin). There are a significant amount of missing values with `r 145838/nrow(ny_noaa)` of prcp, `r 381221/nrow(ny_noaa)` of snow, `r 591786/nrow(ny_noaa)` of snwd, `r 1134358/nrow(ny_noaa)` of tmax and `r 1134420/nrow(ny_noaa)` of tmin missing.
 
-Clean data, separate date, change units, and find most common observed value
+Clean data, separate date, change units, and find most common observed value of snowfall
 ```{r}
-ny_noaa
+ny_noaa = ny_noaa %>%
+  mutate(prcp=prcp/10) %>%
+  mutate(tmax=as.numeric(tmax)/10) %>%
+  mutate(tmin=as.numeric(tmin)/10) %>%
+  separate(date,into=c("year","month","day"),sep="-",remove=TRUE,convert=TRUE,extra="warn",fill="warn")
+
+ny_noaa %>%
+  group_by(snow)%>%
+  summarize(n_obs=n()) %>%
+  mutate(snow_rank=min_rank(desc(n_obs))) %>%
+  filter(snow_rank<=5)
+
 ```
+The most commonly observed values of snowfall are 0 by far, followed by 25, 13, and 51. 0 is most common because it is more likely than not not snowing on any given day. The other values are close to .5, 1, and 2 inches which is probably the unit of measure that is being used in the US.
+
 
