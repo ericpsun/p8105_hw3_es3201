@@ -2,6 +2,8 @@
 title: "Homework 3"
 author: Eric Sun
 output: github_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 Initial setup
@@ -10,6 +12,7 @@ Initial setup
 library(tidyverse)
 library(p8105.datasets)
 library(viridis)
+library(ggridges)
 
 knitr::opts_chunk$set(
   fig.width = 6,
@@ -179,5 +182,22 @@ ny_noaa %>%
 
 ```
 The most commonly observed values of snowfall are 0 by far, followed by 25, 13, and 51. 0 is most common because it is more likely than not not snowing on any given day. The other values are close to .5, 1, and 2 inches which is probably the unit of measure that is being used in the US.
+
+Two-panel plot showing the average max temperature in January and in July in each station across years
+```{r}
+ny_noaa%>%
+  select(id,year,month,tmax) %>%
+  filter(month==c("1","7")) %>%
+  drop_na(tmax) %>%
+  group_by(id,year,month) %>%
+  summarize(average_max_temp=mean(tmax)) %>%
+  ggplot(aes(x=year,y=average_max_temp, group=id, color=id))+
+  geom_point() +
+  geom_path()+
+  facet_grid(. ~ month) +
+  theme(legend.position="none")
+```
+
+The main discernible pattern is that the average max temperatures in January are lower than in July. The temperatures also oscillate, and roughly every 5 years it hits a relative peak or relative low before moving in the opposite direction.
 
 
