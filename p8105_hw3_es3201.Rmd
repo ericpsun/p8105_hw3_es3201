@@ -12,7 +12,7 @@ Initial setup
 library(tidyverse)
 library(p8105.datasets)
 library(viridis)
-library(ggridges)
+library(patchwork)
 
 knitr::opts_chunk$set(
   fig.width = 6,
@@ -201,3 +201,22 @@ ny_noaa%>%
 The main discernible pattern is that the average max temperatures in January are lower than in July. The temperatures also oscillate, and roughly every 5 years it hits a relative peak or relative low before moving in the opposite direction.
 
 
+TWo-panel plot of tmax vs tmin for full dataset and distribution of snowfall values greater than 0 and less than 100 separately by year
+```{r}
+tmax_tmin_p=ny_noaa %>%
+  select(tmax,tmin) %>%
+  drop_na() %>%
+  ggplot(aes(x=tmin,y=tmax))+
+  geom_hex()
+
+snowfall_p = ny_noaa %>%
+  select(year,snow) %>%
+  drop_na() %>%
+  filter(snow>0 & snow<100) %>%
+  ggplot(aes(x=year, y=snow))+
+  geom_bin2d()
+
+tmax_tmin_p + snowfall_p
+```
+
+There appears to be a positive linear relationship between tmin and tmax. The greatest counts of snowfall distribution are at 25mm.
